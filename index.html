@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#070816" />
+  <meta name="description" content="A cosmic friendship page for Rommy with a chilled-out, appreciation-focused vibe." />
+  <title>For Rommy | Cosmic Friendship</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-0: #050814;
+      --bg-1: #0b1230;
+      --bg-2: #1b1142;
+      --bg-3: #03040a;
+      --text: rgba(248, 250, 255, 0.96);
+      --muted: rgba(225, 232, 255, 0.72);
+      --faint: rgba(225, 232, 255, 0.5);
+      --line: rgba(255, 255, 255, 0.12);
+      --glow: rgba(125, 108, 255, 0.45);
+      --glow-2: rgba(84, 181, 255, 0.35);
+      --accent: #9a86ff;
+      --accent-2: #69d7ff;
+      --accent-3: #f3b4ff;
+      --success: #80ffd2;
+      --danger: #ff8eb7;
+      --shadow: 0 30px 100px rgba(0, 0, 0, 0.52);
+      --radius: 30px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: #02030a;
+      overflow: hidden;
+    }
+
+    body {
+      min-height: 100svh;
+      padding:
+        max(12px, env(safe-area-inset-top))
+        max(12px, env(safe-area-inset-right))
+        max(12px, env(safe-area-inset-bottom))
+        max(12px, env(safe-area-inset-left));
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 18% 16%, rgba(115, 103, 255, 0.24), transparent 18%),
+        radial-gradient(circle at 82% 20%, rgba(84, 181, 255, 0.16), transparent 16%),
+        radial-gradient(circle at 50% 88%, rgba(243, 180, 255, 0.12), transparent 22%),
+        linear-gradient(145deg, var(--bg-0) 0%, var(--bg-1) 38%, var(--bg-2) 72%, var(--bg-3) 100%);
+      background-size: 140% 140%;
+      animation: bgDrift 22s ease-in-out infinite alternate;
+    }
+
+    button,
+    textarea,
+    input {
+      font: inherit;
+    }
+
+    .app {
+      position: relative;
+      width: min(100%, 420px);
+      height: calc(100svh - 24px);
+      margin: 0 auto;
+      isolation: isolate;
+    }
+
+    .starfield,
+    .starfield::before,
+    .starfield::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .starfield {
+      z-index: 0;
+      opacity: 0.95;
+      background-image:
+        radial-gradient(circle at 12% 22%, rgba(255, 255, 255, 0.9) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 85% 10%, rgba(173, 223, 255, 0.8) 0 1px, transparent 1.6px),
+        radial-gradient(circle at 24% 72%, rgba(255, 255, 255, 0.65) 0 1px, transparent 1.8px),
+        radial-gradient(circle at 72% 66%, rgba(255, 255, 255, 0.8) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 52% 44%, rgba(255, 255, 255, 0.55) 0 1px, transparent 1.6px);
+      filter: drop-shadow(0 0 10px rgba(140, 180, 255, 0.14));
+      animation: twinkle 10s ease-in-out infinite alternate;
+    }
+
+    .starfield::before {
+      background-image:
+        radial-gradient(circle at 15% 45%, rgba(255, 255, 255, 0.75) 0 1px, transparent 1.8px),
+        radial-gradient(circle at 42% 12%, rgba(121, 204, 255, 0.85) 0 1px, transparent 1.6px),
+        radial-gradient(circle at 75% 30%, rgba(255, 255, 255, 0.7) 0 1px, transparent 1.7px),
+        radial-gradient(circle at 90% 52%, rgba(243, 180, 255, 0.7) 0 1px, transparent 1.7px),
+        radial-gradient(circle at 60% 82%, rgba(255, 255, 255, 0.65) 0 1px, transparent 1.5px);
+      opacity: 0.72;
+      transform: translate3d(0, 0, 0);
+      animation: driftStars 26s ease-in-out infinite alternate;
+    }
+
+    .starfield::after {
+      background:
+        radial-gradient(circle at 50% 35%, rgba(125, 108, 255, 0.18), transparent 22%),
+        radial-gradient(circle at 72% 78%, rgba(84, 181, 255, 0.12), transparent 18%),
+        radial-gradient(circle at 26% 82%, rgba(243, 180, 255, 0.1), transparent 14%),
+        radial-gradient(circle at 62% 22%, rgba(255, 255, 255, 0.08), transparent 12%);
+      filter: blur(18px);
+      animation: nebulaPulse 18s ease-in-out infinite alternate;
+    }
+
+    .shell {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow:
+        0 0 0 1px rgba(154, 134, 255, 0.08),
+        0 0 0 10px rgba(154, 134, 255, 0.04),
+        var(--shadow);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.05)),
+        linear-gradient(180deg, rgba(11, 15, 33, 0.78), rgba(10, 10, 22, 0.92));
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+    }
+
+    .shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(154, 134, 255, 0.18), transparent 26%),
+        radial-gradient(circle at 20% 18%, rgba(105, 215, 255, 0.11), transparent 20%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 25%, transparent 75%, rgba(255, 255, 255, 0.04));
+      pointer-events: none;
+    }
+
+    .topbar,
+    .stage,
+    .footer {
+      position: relative;
+      z-index: 1;
+    }
+
+    .topbar {
+      padding: 14px 14px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      padding: 7px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 999px;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(245, 247, 255, 0.76);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, var(--accent-2), var(--accent));
+      box-shadow: 0 0 14px rgba(105, 215, 255, 0.6);
+    }
+
+    .title {
+      margin: 0;
+      font-family: "Space Grotesk", Inter, sans-serif;
+      font-size: clamp(1.55rem, 5vw, 2rem);
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+    }
+
+    .subtitle {
+      margin: 10px 0 0;
+      max-width: 34ch;
+      color: var(--muted);
+      font-size: 0.93rem;
+      line-height: 1.55;
+    }
+
+    .progress-wrap {
+      padding: 12px 14px 0;
+    }
+
+    .progress-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.64);
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 18px rgba(105, 215, 255, 0.45);
+      transition: width 0.35s ease;
+    }
+
+    .stage {
+      flex: 1;
+      min-height: 0;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .screen {
+      flex: 1;
+      min-height: 0;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    .panel {
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 24px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.04)),
+        linear-gradient(180deg, rgba(10, 13, 27, 0.72), rgba(11, 12, 24, 0.85));
+      box-shadow:
+        0 0 0 1px rgba(154, 134, 255, 0.06),
+        0 18px 50px rgba(0, 0, 0, 0.22),
+        0 0 28px rgba(154, 134, 255, 0.08);
+      padding: 16px;
+    }
+
+    .intro {
+      text-align: center;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .orb {
+      width: 88px;
+      height: 88px;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.18) 20%, transparent 34%),
+        radial-gradient(circle at 50% 50%, rgba(154, 134, 255, 0.72), rgba(105, 215, 255, 0.36) 36%, rgba(11, 13, 30, 0.1) 72%);
+      box-shadow:
+        0 0 0 10px rgba(154, 134, 255, 0.08),
+        0 0 30px rgba(105, 215, 255, 0.32),
+        0 0 70px rgba(154, 134, 255, 0.18);
+      position: relative;
+    }
+
+    .orb::before,
+    .orb::after {
+      content: "";
+      position: absolute;
+      inset: -20px;
+      border-radius: inherit;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      opacity: 0.7;
+      animation: orbit 10s linear infinite;
+    }
+
+    .orb::after {
+      inset: -34px;
+      animation-duration: 14s;
+      animation-direction: reverse;
+      opacity: 0.45;
+    }
+
+    .intro-copy {
+      margin: 0;
+      max-width: 30ch;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 0.96rem;
+    }
+
+    .hint {
+      margin: 0;
+      color: rgba(225, 232, 255, 0.62);
+      font-size: 0.86rem;
+      line-height: 1.55;
+    }
+
+    .question-card {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      height: 100%;
+    }
+
+    .question-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .question-label {
+      margin: 0;
+      color: rgba(225, 232, 255, 0.62);
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .question-count {
+      font-size: 0.8rem;
+      color: rgba(225, 232, 255, 0.58);
+    }
+
+    .question {
+      margin: 0;
+      font-family: "Space Grotesk", Inter, sans-serif;
+      font-size: clamp(1.25rem, 4.8vw, 1.6rem);
+      line-height: 1.15;
+      letter-spacing: -0.04em;
+    }
+
+    .answer {
+      width: 100%;
+      flex: 1;
+      min-height: 164px;
+      resize: none;
+      padding: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 20px;
+      color: var(--text);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03)),
+        rgba(3, 6, 16, 0.55);
+      outline: none;
+      line-height: 1.6;
+      font-size: 0.98rem;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+    .answer::placeholder {
+      color: rgba(225, 232, 255, 0.38);
+    }
+
+    .answer:focus {
+      border-color: rgba(105, 215, 255, 0.48);
+      box-shadow:
+        0 0 0 4px rgba(105, 215, 255, 0.09),
+        0 0 30px rgba(154, 134, 255, 0.1);
+      transform: translateY(-1px);
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .btn {
+      appearance: none;
+      border: 0;
+      border-radius: 18px;
+      min-height: 52px;
+      padding: 0 18px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+    }
+
+    .btn:active {
+      transform: translateY(1px) scale(0.99);
+    }
+
+    .btn-primary {
+      color: #08111f;
+      background: linear-gradient(135deg, var(--accent-2), var(--accent), var(--accent-3));
+      box-shadow:
+        0 14px 28px rgba(105, 215, 255, 0.18),
+        0 0 26px rgba(154, 134, 255, 0.18);
+    }
+
+    .btn-secondary {
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .footer {
+      padding: 0 14px 14px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      color: rgba(225, 232, 255, 0.48);
+      font-size: 0.74rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .signature {
+      text-align: right;
+    }
+
+    .final {
+      gap: 14px;
+      justify-content: center;
+    }
+
+    .final-head {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: center;
+      text-align: center;
+    }
+
+    .final-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.04);
+      color: rgba(245, 247, 255, 0.78);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-size: 11px;
+    }
+
+    .final-badge::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, var(--success), var(--accent-2));
+      box-shadow: 0 0 14px rgba(128, 255, 210, 0.55);
+    }
+
+    .final-title {
+      margin: 0;
+      font-family: "Space Grotesk", Inter, sans-serif;
+      font-size: clamp(1.45rem, 5.2vw, 2rem);
+      line-height: 1.06;
+      letter-spacing: -0.05em;
+      text-align: center;
+    }
+
+    .final-copy {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.93rem;
+      line-height: 1.65;
+      text-align: center;
+    }
+
+    .message {
+      width: 100%;
+      max-height: 44svh;
+      overflow: auto;
+      padding: 16px;
+      border-radius: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(5, 8, 18, 0.66);
+      color: rgba(249, 251, 255, 0.92);
+      line-height: 1.72;
+      white-space: pre-wrap;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    }
+
+    .message strong {
+      color: white;
+    }
+
+    .message .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 1.15em;
+      margin-left: 2px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, var(--accent-2), var(--accent));
+      vertical-align: -0.18em;
+      animation: blink 0.9s steps(2, end) infinite;
+    }
+
+    .toast-stack {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      top: 14px;
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    .toast {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(8, 11, 24, 0.88);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+      color: var(--text);
+      transform: translateY(-8px);
+      opacity: 0;
+      animation: toastIn 0.28s ease forwards, toastOut 0.32s ease forwards 2.8s;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .toast::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, var(--danger), var(--accent-3));
+      box-shadow: 0 0 14px rgba(255, 142, 183, 0.45);
+      flex: 0 0 auto;
+    }
+
+    .toast.success::before {
+      background: linear-gradient(180deg, var(--success), var(--accent-2));
+      box-shadow: 0 0 14px rgba(128, 255, 210, 0.45);
+    }
+
+    .toast span {
+      font-size: 0.92rem;
+      line-height: 1.45;
+      color: rgba(248, 250, 255, 0.92);
+    }
+
+    .confetti-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 90;
+      overflow: hidden;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      width: 8px;
+      height: 12px;
+      border-radius: 999px;
+      opacity: 0;
+      animation: confettiFall 1100ms ease-out forwards;
+    }
+
+    .screen.fade-in {
+      animation: fadeIn 0.3s ease both;
+    }
+
+    .screen.fade-out {
+      animation: fadeOut 0.22s ease both;
+    }
+
+    .nav-note {
+      color: var(--faint);
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+
+    @keyframes bgDrift {
+      from { background-position: 0% 0%; }
+      to { background-position: 100% 100%; }
+    }
+
+    @keyframes twinkle {
+      from { opacity: 0.62; transform: scale(1); }
+      to { opacity: 1; transform: scale(1.015); }
+    }
+
+    @keyframes driftStars {
+      from { transform: translate3d(0, 0, 0); }
+      to { transform: translate3d(0, -10px, 0); }
+    }
+
+    @keyframes nebulaPulse {
+      from { opacity: 0.7; transform: scale(1); }
+      to { opacity: 1; transform: scale(1.02); }
+    }
+
+    @keyframes orbit {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeOut {
+      from { opacity: 1; transform: translateY(0); }
+      to { opacity: 0; transform: translateY(-6px); }
+    }
+
+    @keyframes toastIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes toastOut {
+      to { opacity: 0; transform: translateY(-8px); }
+    }
+
+    @keyframes confettiFall {
+      0% {
+        opacity: 0;
+        transform: translate3d(0, 0, 0) rotate(0deg) scale(0.6);
+      }
+      10% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform: translate3d(var(--dx), var(--dy), 0) rotate(var(--rot)) scale(1);
+      }
+    }
+
+    @media (max-width: 420px) {
+      .topbar {
+        padding: 12px 12px 10px;
+      }
+
+      .progress-wrap,
+      .stage,
+      .footer {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      .message {
+        max-height: 38svh;
+      }
+    }
+
+    @media (min-width: 421px) {
+      body {
+        padding: 18px;
+      }
+
+      .app {
+        height: min(calc(100svh - 36px), 820px);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app" aria-live="polite">
+    <div class="starfield" aria-hidden="true"></div>
+    <div class="toast-stack" id="toastStack" aria-hidden="true"></div>
+    <div class="confetti-layer" id="confettiLayer" aria-hidden="true"></div>
+
+    <section class="shell" aria-label="Rommy friendship page">
+      <header class="topbar">
+        <div class="eyebrow">Cosmic friendship log</div>
+        <h1 class="title">For Rommy, from the quiet parts of the universe</h1>
+        <p class="subtitle">
+          Three quick questions, then a little space note built just for your vibe.
+        </p>
+      </header>
+
+      <div class="progress-wrap" aria-hidden="true">
+        <div class="progress-row">
+          <span id="progressLabel">Step 1 of 3</span>
+          <span id="progressPercent">0%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+
+      <section class="stage">
+        <article class="screen active intro" id="introScreen">
+          <div class="orb" aria-hidden="true"></div>
+          <p class="intro-copy">
+            This is a chill little space for the real ones: part question card, part appreciation note, all cosmic energy.
+          </p>
+          <p class="hint">
+            Tap start, answer honestly, and I’ll turn it into a clean reveal at the end.
+          </p>
+          <div class="actions">
+            <button class="btn btn-primary" id="startBtn" type="button">Start the vibe</button>
+          </div>
+        </article>
+
+        <article class="screen question-screen" id="questionScreen" aria-labelledby="questionText">
+          <form class="question-card" id="questionForm" novalidate>
+            <div class="question-meta">
+              <p class="question-label" id="questionTag">Question 1</p>
+              <div class="question-count" id="questionCount">1 / 3</div>
+            </div>
+            <h2 class="question" id="questionText">What's the most unforgettable thing we've done together?</h2>
+            <textarea
+              class="answer"
+              id="answerField"
+              name="answer"
+              placeholder="Write it out here..."
+              autocomplete="off"
+              autocapitalize="sentences"
+              spellcheck="true"
+              maxlength="600"
+              required
+            ></textarea>
+            <p class="nav-note" id="navNote">Be real, be short or go deep. Your call.</p>
+            <div class="actions">
+              <button class="btn btn-primary" id="primaryBtn" type="submit">Next</button>
+              <button class="btn btn-secondary" id="backBtn" type="button">Back</button>
+            </div>
+          </form>
+        </article>
+
+        <article class="screen final" id="finalScreen">
+          <div class="final-head">
+            <div class="final-badge">Final signal</div>
+            <h2 class="final-title">A note for Rommy</h2>
+            <p class="final-copy">
+              The answers are in. Now it’s time for the cosmic appreciation part.
+            </p>
+          </div>
+          <div class="message" id="finalMessage" aria-label="Final appreciation message"></div>
+          <div class="actions">
+            <button class="btn btn-secondary" id="restartBtn" type="button">Run it back</button>
+          </div>
+        </article>
+      </section>
+
+      <footer class="footer">
+        <div id="footerLeft">Mobile-first • Cosmic theme</div>
+        <div class="signature" id="footerRight">Formspree ready</div>
+      </footer>
+    </section>
+  </main>
+
+  <script>
+    // Replace these placeholders before publishing.
+    const CONFIG = {
+      formspreeId: "xgogqeew",
+      email: "jmcustoms1609@gmail.com",
+      yourName: "Jude"
+    };
+
+    const QUESTIONS = [
+      "What's the most unforgettable thing we've done together?",
+      "What's one thing you appreciate about our friendship?",
+      "If we could have a perfect hangout, what would it look like?"
+    ];
+
+    const FINAL_TEMPLATE = [
+      `Rommy, you're genuinely one of the realest people I know. 🌌`,
+      ``,
+      `Not everyone gets to have a friend like you - someone who just gets it without needing to explain.`,
+      ``,
+      `The late night talks, the random laughs, the moments that don't even need words - that's what I appreciate most about you.`,
+      ``,
+      `You're a solid person. A real one. And I'm grateful to have you in my life.`,
+      ``,
+      `Keep being you, girl. The world needs more people like you.`,
+      ``,
+      `This website is proof that you're the kind of friend worth building for. 🚀`,
+      ``,
+      `— ${CONFIG.yourName}`
+    ].join("\n");
+
+    const screens = {
+      intro: document.getElementById("introScreen"),
+      questions: document.getElementById("questionScreen"),
+      final: document.getElementById("finalScreen")
+    };
+
+    const progressFill = document.getElementById("progressFill");
+    const progressLabel = document.getElementById("progressLabel");
+    const progressPercent = document.getElementById("progressPercent");
+    const questionTag = document.getElementById("questionTag");
+    const questionCount = document.getElementById("questionCount");
+    const questionText = document.getElementById("questionText");
+    const answerField = document.getElementById("answerField");
+    const navNote = document.getElementById("navNote");
+    const primaryBtn = document.getElementById("primaryBtn");
+    const backBtn = document.getElementById("backBtn");
+    const startBtn = document.getElementById("startBtn");
+    const restartBtn = document.getElementById("restartBtn");
+    const questionForm = document.getElementById("questionForm");
+    const finalMessage = document.getElementById("finalMessage");
+    const toastStack = document.getElementById("toastStack");
+    const confettiLayer = document.getElementById("confettiLayer");
+    const footerRight = document.getElementById("footerRight");
+
+    const answers = ["", "", ""];
+    let currentStep = 0;
+    let typingTimer = null;
+    let currentToastTimer = null;
+
+    function showScreen(name) {
+      Object.values(screens).forEach((screen) => {
+        screen.classList.remove("active", "fade-in", "fade-out");
+      });
+      const screen = screens[name];
+      screen.classList.add("active", "fade-in");
+      requestAnimationFrame(() => screen.classList.remove("fade-in"));
+    }
+
+    function setProgress(step) {
+      const ratio = step / QUESTIONS.length;
+      const pct = Math.round(ratio * 100);
+      progressFill.style.width = `${pct}%`;
+      progressLabel.textContent = step === 0 ? "Step 0 of 3" : `Step ${Math.min(step, 3)} of 3`;
+      progressPercent.textContent = `${pct}%`;
+    }
+
+    function hydrateQuestion(step) {
+      currentStep = step;
+      questionTag.textContent = `Question ${step + 1}`;
+      questionCount.textContent = `${step + 1} / ${QUESTIONS.length}`;
+      questionText.textContent = QUESTIONS[step];
+      answerField.value = answers[step] || "";
+      answerField.placeholder = "Write it out here...";
+      navNote.textContent = step === 0
+        ? "Be real, be short or go deep. Your call."
+        : "Keep the chill energy going. A sentence is enough if that's your style.";
+      primaryBtn.textContent = step === QUESTIONS.length - 1 ? "Reveal the note" : "Next";
+      backBtn.style.visibility = step === 0 ? "hidden" : "visible";
+      setProgress(step + 1);
+      setTimeout(() => answerField.focus({ preventScroll: true }), 60);
+    }
+
+    function showToast(message, type = "error") {
+      const toast = document.createElement("div");
+      toast.className = `toast ${type}`;
+      toast.innerHTML = `<span>${message}</span>`;
+      toastStack.appendChild(toast);
+
+      window.clearTimeout(currentToastTimer);
+      currentToastTimer = window.setTimeout(() => {
+        if (toast.isConnected) {
+          toast.remove();
+        }
+      }, 3400);
+    }
+
+    function animateConfetti() {
+      const colors = ["#69d7ff", "#9a86ff", "#f3b4ff", "#80ffd2", "#ffffff"];
+      const pieces = 42;
+      const rect = document.body.getBoundingClientRect();
+
+      for (let i = 0; i < pieces; i += 1) {
+        const piece = document.createElement("span");
+        piece.className = "confetti-piece";
+        const x = Math.random() * rect.width;
+        const y = Math.max(60, rect.height * 0.16 + Math.random() * 80);
+        const dx = (Math.random() - 0.5) * 260;
+        const dy = 220 + Math.random() * 280;
+        const rot = `${Math.round((Math.random() - 0.5) * 720)}deg`;
+        piece.style.left = `${x}px`;
+        piece.style.top = `${y}px`;
+        piece.style.background = colors[i % colors.length];
+        piece.style.setProperty("--dx", `${dx}px`);
+        piece.style.setProperty("--dy", `${dy}px`);
+        piece.style.setProperty("--rot", rot);
+        piece.style.animationDelay = `${Math.random() * 90}ms`;
+        confettiLayer.appendChild(piece);
+
+        window.setTimeout(() => piece.remove(), 1400);
+      }
+    }
+
+    function typeFinalMessage(text) {
+      finalMessage.innerHTML = "";
+      let index = 0;
+
+      const cursor = document.createElement("span");
+      cursor.className = "cursor";
+
+      function write() {
+        if (index < text.length) {
+          finalMessage.textContent = text.slice(0, index + 1);
+          finalMessage.appendChild(cursor);
+          index += 1;
+          typingTimer = window.setTimeout(write, index % 4 === 0 ? 24 : 16);
+        } else {
+          finalMessage.textContent = text;
+        }
+      }
+
+      finalMessage.innerHTML = "";
+      write();
+    }
+
+    function buildFormPayload() {
+      const formData = new FormData();
+      formData.append("name", "Rommy");
+      formData.append("email", CONFIG.email);
+      formData.append("message", [
+        `Q1: ${answers[0] || "(left blank)"}`,
+        `Q2: ${answers[1] || "(left blank)"}`,
+        `Q3: ${answers[2] || "(left blank)"}`,
+        "",
+        FINAL_TEMPLATE
+      ].join("\n"));
+      return formData;
+    }
+
+    async function submitToFormspree() {
+      if (!CONFIG.formspreeId || CONFIG.formspreeId.includes("PASTE YOUR FORMPREE ID HERE")) {
+        showToast("Add your Formspree ID in the config block before publishing.", "error");
+        return false;
+      }
+
+      try {
+        const response = await fetch(`https://formspree.io/f/${CONFIG.formspreeId}`, {
+          method: "POST",
+          headers: {
+            Accept: "application/json"
+          },
+          body: buildFormPayload()
+        });
+
+        if (!response.ok) {
+          throw new Error("Formspree request failed");
+        }
+
+        footerRight.textContent = "Sent to Formspree";
+        return true;
+      } catch (error) {
+        showToast("Could not send right now. Check the Formspree ID and try again.", "error");
+        return false;
+      }
+    }
+
+    async function goNext() {
+      const value = answerField.value.trim();
+      if (!value) {
+        showToast("Drop a quick answer first so the page can keep moving.", "error");
+        answerField.focus();
+        return;
+      }
+
+      answers[currentStep] = value;
+
+      if (currentStep < QUESTIONS.length - 1) {
+        hydrateQuestion(currentStep + 1);
+        return;
+      }
+
+      primaryBtn.disabled = true;
+      backBtn.disabled = true;
+      primaryBtn.textContent = "Sending...";
+
+      const sent = await submitToFormspree();
+      if (!sent) {
+        primaryBtn.disabled = false;
+        backBtn.disabled = false;
+        primaryBtn.textContent = "Reveal the note";
+        return;
+      }
+
+      showScreen("final");
+      setProgress(QUESTIONS.length);
+      progressLabel.textContent = "Complete";
+      progressPercent.textContent = "100%";
+      animateConfetti();
+      typeFinalMessage(FINAL_TEMPLATE);
+      footerRight.textContent = "Cosmic reveal complete";
+      window.clearTimeout(typingTimer);
+    }
+
+    function goBack() {
+      if (currentStep === 0) {
+        showScreen("intro");
+        progressFill.style.width = "0%";
+        progressLabel.textContent = "Step 0 of 3";
+        progressPercent.textContent = "0%";
+        return;
+      }
+
+      answers[currentStep] = answerField.value.trim();
+      hydrateQuestion(currentStep - 1);
+    }
+
+    function resetFlow() {
+      answers[0] = "";
+      answers[1] = "";
+      answers[2] = "";
+      currentStep = 0;
+      questionForm.reset();
+      primaryBtn.disabled = false;
+      backBtn.disabled = false;
+      primaryBtn.textContent = "Next";
+      footerRight.textContent = "Formspree ready";
+      showScreen("intro");
+      setProgress(0);
+      finalMessage.innerHTML = "";
+      confettiLayer.innerHTML = "";
+      window.clearTimeout(typingTimer);
+    }
+
+    startBtn.addEventListener("click", () => {
+      showScreen("questions");
+      hydrateQuestion(0);
+    });
+
+    questionForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      goNext();
+    });
+
+    backBtn.addEventListener("click", goBack);
+    restartBtn.addEventListener("click", resetFlow);
+
+    answerField.addEventListener("keydown", (event) => {
+      if ((event.metaKey || event.ctrlKey) && event.key === "Enter") {
+        event.preventDefault();
+        goNext();
+      }
+    });
+
+    setProgress(0);
+  </script>
+</body>
+</html>
