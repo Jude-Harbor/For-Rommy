@@ -234,6 +234,76 @@
       transition: width 0.35s ease;
     }
 
+    .gate {
+      position: absolute;
+      inset: 0;
+      z-index: 6;
+      display: none;
+      place-items: center;
+      padding: 14px;
+      background:
+        radial-gradient(circle at 50% 20%, rgba(154, 134, 255, 0.14), transparent 24%),
+        radial-gradient(circle at 70% 72%, rgba(105, 215, 255, 0.12), transparent 20%),
+        rgba(1, 4, 12, 0.72);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .gate.active {
+      display: grid;
+    }
+
+    .gate-card {
+      width: 100%;
+      padding: 22px 18px;
+      border-radius: 26px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)),
+        linear-gradient(180deg, rgba(10, 13, 27, 0.86), rgba(7, 9, 18, 0.92));
+      box-shadow:
+        0 0 0 1px rgba(154, 134, 255, 0.06),
+        0 0 34px rgba(154, 134, 255, 0.18),
+        0 24px 70px rgba(0, 0, 0, 0.45);
+      text-align: center;
+    }
+
+    .gate-title {
+      margin: 8px 0 0;
+      font-family: "Space Grotesk", Inter, sans-serif;
+      font-size: clamp(1.6rem, 6vw, 2.2rem);
+      line-height: 1.06;
+      letter-spacing: -0.05em;
+    }
+
+    .gate-copy {
+      margin: 10px 0 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 0.96rem;
+    }
+
+    .gate-countdown {
+      margin: 18px auto 0;
+      padding: 14px 12px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.05);
+      font-family: "Space Grotesk", Inter, sans-serif;
+      font-size: clamp(1.4rem, 7vw, 2rem);
+      letter-spacing: 0.08em;
+      color: rgba(248, 250, 255, 0.96);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    }
+
+    .gate-note {
+      margin: 12px 0 0;
+      color: rgba(225, 232, 255, 0.58);
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
     .stage {
       flex: 1;
       min-height: 0;
@@ -714,8 +784,17 @@
     <div class="starfield" aria-hidden="true"></div>
     <div class="toast-stack" id="toastStack" aria-hidden="true"></div>
     <div class="confetti-layer" id="confettiLayer" aria-hidden="true"></div>
+    <section class="gate active" id="gateScreen" aria-label="Countdown gate">
+      <div class="gate-card">
+        <div class="eyebrow">Locked until August 1</div>
+        <h1 class="gate-title">The signal opens at midnight.</h1>
+        <p class="gate-copy">Come back when the clock hits 12:00 AM on August 1st.</p>
+        <div class="gate-countdown" id="gateCountdown">00d 00h 00m 00s</div>
+        <p class="gate-note" id="gateNote">Counting down...</p>
+      </div>
+    </section>
 
-    <section class="shell" aria-label="Rommy friendship page">
+    <section class="shell" aria-label="Rommy friendship page" hidden>
       <header class="topbar">
         <div class="eyebrow">Cosmic friendship log</div>
         <h1 class="title">For Rommy, from the quiet parts of the universe</h1>
@@ -849,11 +928,24 @@
     const toastStack = document.getElementById("toastStack");
     const confettiLayer = document.getElementById("confettiLayer");
     const footerRight = document.getElementById("footerRight");
+    const gateScreen = document.getElementById("gateScreen");
+    const gateCountdown = document.getElementById("gateCountdown");
+    const gateNote = document.getElementById("gateNote");
+    const shell = document.querySelector(".shell");
 
     const answers = ["", "", ""];
     let currentStep = 0;
     let typingTimer = null;
     let currentToastTimer = null;
+    let gateTimer = null;
+
+    function getReleaseAt() {
+      const now = new Date();
+      const target = new Date(now.getFullYear(), 7, 1, 0, 0, 0, 0);
+      return now < target ? target : new Date(now.getFullYear() + 1, 7, 1, 0, 0, 0, 0);
+    }
+
+    const releaseAt = getReleaseAt();
 
     function showScreen(name) {
       Object.values(screens).forEach((screen) => {
@@ -870,6 +962,41 @@
       progressFill.style.width = `${pct}%`;
       progressLabel.textContent = step === 0 ? "Step 0 of 3" : `Step ${Math.min(step, 3)} of 3`;
       progressPercent.textContent = `${pct}%`;
+    }
+
+    function formatCountdown(ms) {
+      const total = Math.max(0, ms);
+      const seconds = Math.floor(total / 1000);
+      const days = Math.floor(seconds / 86400);
+      const hours = Math.floor((seconds % 86400) / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+      const secs = seconds % 60;
+      return `${String(days).padStart(2, "0")}d ${String(hours).padStart(2, "0")}h ${String(minutes).padStart(2, "0")}m ${String(secs).padStart(2, "0")}s`;
+    }
+
+    function unlockSite() {
+      gateScreen.classList.remove("active");
+      gateScreen.setAttribute("aria-hidden", "true");
+      shell.hidden = false;
+      showScreen("intro");
+      setProgress(0);
+      if (gateTimer) {
+        clearInterval(gateTimer);
+        gateTimer = null;
+      }
+    }
+
+    function tickGate() {
+      const remaining = releaseAt.getTime() - Date.now();
+      if (remaining <= 0) {
+        gateCountdown.textContent = "00d 00h 00m 00s";
+        gateNote.textContent = "Unlocked. Welcome in.";
+        unlockSite();
+        return;
+      }
+
+      gateCountdown.textContent = formatCountdown(remaining);
+      gateNote.textContent = `Opens on ${releaseAt.toLocaleDateString([], { month: "long", day: "numeric" })} at 12:00 AM`;
     }
 
     function hydrateQuestion(step) {
@@ -1060,6 +1187,10 @@
     }
 
     startBtn.addEventListener("click", () => {
+      if (Date.now() < releaseAt.getTime()) {
+        showToast("The site unlocks on August 1st at 12:00 AM.", "error");
+        return;
+      }
       showScreen("questions");
       hydrateQuestion(0);
     });
@@ -1080,6 +1211,15 @@
     });
 
     setProgress(0);
+    if (Date.now() < releaseAt.getTime()) {
+      shell.hidden = true;
+      gateScreen.classList.add("active");
+      gateScreen.removeAttribute("aria-hidden");
+      tickGate();
+      gateTimer = window.setInterval(tickGate, 1000);
+    } else {
+      unlockSite();
+    }
   </script>
 </body>
 </html>
